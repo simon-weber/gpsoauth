@@ -24,7 +24,7 @@ def _perform_auth_request(data):
     return google.parse_auth_response(res.text)
 
 
-def perform_master_login(email, password,
+def perform_master_login(email, password, android_id,
                          service='ac2dm', device_country='us', operatorCountry='us',
                          lang='en', sdk_version=17):
     """
@@ -56,6 +56,7 @@ def perform_master_login(email, password,
         'EncryptedPasswd': google.signature(email, password, android_key_7_3_29),
         'service': service,
         'source':  'android',
+        'androidId':   android_id,
         'device_country':  device_country,
         'operatorCountry': device_country,
         'lang':    lang,
@@ -65,7 +66,7 @@ def perform_master_login(email, password,
     return _perform_auth_request(data)
 
 
-def perform_oauth(email, master_token, service, app, client_sig,
+def perform_oauth(email, master_token, android_id, service, app, client_sig,
                   device_country='us', operatorCountry='us', lang='en', sdk_version=17):
     """
     Use a master token from master_login to perform OAuth to a specific Google service.
@@ -91,6 +92,7 @@ def perform_oauth(email, master_token, service, app, client_sig,
         'EncryptedPasswd': master_token,
         'service': service,
         'source':  'android',
+        'androidId':   android_id,
         'app': app,
         'client_sig': client_sig,
         'device_country':  device_country,
