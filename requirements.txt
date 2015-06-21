@@ -1,2 +1,14 @@
+cffi==1.1.2
+cryptography==0.9.1
+enum34==1.0.4
+-e git+git@github.com:simon-weber/gpsoauth.git@91acfd4e34075f0997bfaafa87c3d2088bb733e1#egg=gpsoauth-master
+idna==2.0
+ipaddress==1.0.7
+ndg-httpsclient==0.4.0
+pyOpenSSL==0.15.1
+pyasn1==0.1.7
+pycparser==2.14
 pycrypto==2.6.1
 requests==2.7.0
+six==1.9.0
+wsgiref==0.1.2

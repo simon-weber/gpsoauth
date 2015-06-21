@@ -18,7 +18,7 @@ useragent = 'gpsoauth/' + __version__
 
 
 def _perform_auth_request(data):
-    res = requests.post(auth_url, data, verify=False,
+    res = requests.post(auth_url, data,
                         headers={'User-Agent': useragent})
 
     return google.parse_auth_response(res.text)

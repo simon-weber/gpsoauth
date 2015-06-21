@@ -36,6 +36,9 @@ setup(
     install_requires=[
         'pycrypto',
         'requests',
+        'pyopenssl',
+        'ndg-httpsclient',
+        'pyasn1',
     ],
     license='MIT',
     zip_safe=False,
