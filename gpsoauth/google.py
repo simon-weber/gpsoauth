@@ -25,7 +25,7 @@ def key_to_struct(key):
     mod = long_to_bytes(key.n)
     exponent = long_to_bytes(key.e)
 
-    return '\x00\x00\x00\x80' + mod + '\x00\x00\x00\x03' + exponent
+    return b'\x00\x00\x00\x80' + mod + b'\x00\x00\x00\x03' + exponent
 
 
 def parse_auth_response(text):
@@ -41,8 +41,7 @@ def parse_auth_response(text):
 
 
 def signature(email, password, key):
-    signature = []
-    signature.append('\x00')
+    signature = bytearray(b'\x00')
 
     struct = key_to_struct(key)
     signature.extend(hashlib.sha1(struct).digest()[:4])
@@ -52,4 +51,4 @@ def signature(email, password, key):
 
     signature.extend(encrypted_login)
 
-    return base64.urlsafe_b64encode(''.join(signature))
+    return base64.urlsafe_b64encode(signature)

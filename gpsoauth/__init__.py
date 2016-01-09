@@ -6,10 +6,10 @@ from . import google
 
 # The key is distirbuted with Google Play Services.
 # This one is from version 7.3.29.
-b64_key_7_3_29 = ("AAAAgMom/1a/v0lblO2Ubrt60J2gcuXSljGFQXgcyZWveWLEwo6prwgi3"
-                  "iJIZdodyhKZQrNWp5nKJ3srRXcUW+F1BD3baEVGcmEgqaLZUNBjm057pK"
-                  "RI16kB0YppeGx5qIQ5QjKzsR8ETQbKLNWgRY0QRNVz34kMJR3P/LgHax/"
-                  "6rmf5AAAAAwEAAQ==")
+b64_key_7_3_29 = (b"AAAAgMom/1a/v0lblO2Ubrt60J2gcuXSljGFQXgcyZWveWLEwo6prwgi3"
+                  b"iJIZdodyhKZQrNWp5nKJ3srRXcUW+F1BD3baEVGcmEgqaLZUNBjm057pK"
+                  b"RI16kB0YppeGx5qIQ5QjKzsR8ETQbKLNWgRY0QRNVz34kMJR3P/LgHax/"
+                  b"6rmf5AAAAAwEAAQ==")
 
 android_key_7_3_29 = google.key_from_b64(b64_key_7_3_29)
 
