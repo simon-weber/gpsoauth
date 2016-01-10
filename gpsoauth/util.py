@@ -1,7 +1,12 @@
 import binascii
+import sys
+
+PY3 = sys.version[0] == '3'
 
 
 def bytes_to_long(s):
+    if PY3:
+        return int.from_bytes(s, "big")
     return long(s.encode('hex'), 16)
 
 
