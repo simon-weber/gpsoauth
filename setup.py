@@ -34,7 +34,7 @@ setup(
     packages=['gpsoauth'],
     include_package_data=True,
     install_requires=[
-        'pycrypto >= 2.5',
+        'pycryptodome >= 3.0',
         'requests',
         'pyopenssl',
         'ndg-httpsclient',
