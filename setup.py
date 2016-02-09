@@ -36,9 +36,6 @@ setup(
     install_requires=[
         'pycryptodome >= 3.0',
         'requests',
-        'pyopenssl',
-        'ndg-httpsclient',
-        'pyasn1',
     ],
     license='MIT',
     zip_safe=False,
