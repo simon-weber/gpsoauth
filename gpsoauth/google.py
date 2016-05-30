@@ -1,8 +1,8 @@
 import base64
 import hashlib
 
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Cipher import PKCS1_OAEP
 
 from .util import bytes_to_long, long_to_bytes
 

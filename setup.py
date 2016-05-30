@@ -34,7 +34,7 @@ setup(
     packages=['gpsoauth'],
     include_package_data=True,
     install_requires=[
-        'pycryptodome >= 3.0',
+        'pycryptodomex >= 3.0',
         'requests',
     ],
     license='MIT',
