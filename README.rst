@@ -10,3 +10,4 @@ Many thanks to Dima Kovalenko for reverse engieering the EncryptedPasswd signatu
 Ports
 -----
 * C#: https://github.com/vemacs/GPSOAuthSharp.
+* Ruby: https://github.com/bryanmytko/gpsoauth
