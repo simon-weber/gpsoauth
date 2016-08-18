@@ -17,8 +17,12 @@ auth_url = 'https://android.clients.google.com/auth'
 useragent = 'gpsoauth/' + __version__
 
 
-def _perform_auth_request(data):
-    res = requests.post(auth_url, data,
+def _perform_auth_request(data, proxy=None):
+    session = requests.session()
+    if proxy:
+        session.proxies = proxy
+
+    res = session.post(auth_url, data,
                         headers={'User-Agent': useragent})
 
     return google.parse_auth_response(res.text)
@@ -26,7 +30,7 @@ def _perform_auth_request(data):
 
 def perform_master_login(email, password, android_id,
                          service='ac2dm', device_country='us', operatorCountry='us',
-                         lang='en', sdk_version=17):
+                         lang='en', sdk_version=17, proxy=None):
     """
     Perform a master login, which is what Android does when you first add a Google account.
 
@@ -63,11 +67,12 @@ def perform_master_login(email, password, android_id,
         'sdk_version': sdk_version
     }
 
-    return _perform_auth_request(data)
+    return _perform_auth_request(data, proxy)
 
 
 def perform_oauth(email, master_token, android_id, service, app, client_sig,
-                  device_country='us', operatorCountry='us', lang='en', sdk_version=17):
+                  device_country='us', operatorCountry='us', lang='en', sdk_version=17,
+                  proxy=None):
     """
     Use a master token from master_login to perform OAuth to a specific Google service.
 
@@ -101,4 +106,4 @@ def perform_oauth(email, master_token, android_id, service, app, client_sig,
         'sdk_version': sdk_version
     }
 
-    return _perform_auth_request(data)
+    return _perform_auth_request(data, proxy)
