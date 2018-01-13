@@ -5,7 +5,7 @@ gpsoauth allows python code to use the "master token" flow that KB Sriram descri
 
 This can be useful when writing code that poses as a Google app, like `gmusicapi <https://github.com/simon-weber/Unofficial-Google-Music-API>`__ does.
 
-Many thanks to Dima Kovalenko for reverse engieering the EncryptedPasswd signature in http://codedigging.com/blog/2014-06-09-about-encryptedpasswd.
+Many thanks to Dima Kovalenko for reverse engineering the EncryptedPasswd signature in http://codedigging.com/blog/2014-06-09-about-encryptedpasswd.
 
 Ports
 -----
