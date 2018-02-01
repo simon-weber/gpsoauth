@@ -12,4 +12,4 @@ Ports
 * C#: https://github.com/vemacs/GPSOAuthSharp.
 * Ruby: https://github.com/bryanmytko/gpsoauth
 * Java: https://github.com/svarzee/gpsoauth-java
-* C++: https://github.com/dvirtz/gpsoauth-cpp
+* C++: https://github.com/dvirtz/gpsoauth-cpp and https://github.com/Iciclelz/gpsoauthclient
