@@ -1,7 +1,8 @@
 gpsoauth: a python client library for Google Play Services OAuth
 ================================================================
 
-.. image:: https://img.shields.io/badge/dynamic/json.svg?label=release&query=%24.status&maxAge=43200&uri=https%3A%2F%2Fwww.repominder.com%2Fbadge%2FeyJ1c2VyX2lkIjogMiwgInJlcG9faWQiOiAyMX0%3D%2F&link=https%3A%2F%2Fwww.repominder.com%2F   :target: https://www.repominder.com
+.. image:: https://img.shields.io/badge/dynamic/json.svg?label=release&query=%24.status&maxAge=43200&uri=https%3A%2F%2Fwww.repominder.com%2Fbadge%2FeyJ1c2VyX2lkIjogMiwgInJlcG9faWQiOiAyMX0%3D%2F&link=https%3A%2F%2Fwww.repominder.com%2F
+        :target: https://www.repominder.com
 
 gpsoauth allows python code to use the "master token" flow that KB Sriram described at http://sbktech.blogspot.com/2014/01/inside-android-play-services-magic.html.
 
