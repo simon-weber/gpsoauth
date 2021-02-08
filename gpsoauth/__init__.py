@@ -1,4 +1,7 @@
 import requests
+import ssl
+from urllib3.poolmanager import PoolManager
+from urllib3.util.ssl_ import DEFAULT_CIPHERS
 
 from ._version import __version__
 from . import google
@@ -16,9 +19,40 @@ android_key_7_3_29 = google.key_from_b64(b64_key_7_3_29)
 auth_url = 'https://android.clients.google.com/auth'
 useragent = 'gpsoauth/' + __version__
 
+# Blocking AESCCM in urllib3 > 1.26.3 causes Google to return 403 Bad
+# Authentication.
+CIPHERS = ":".join(
+    cipher
+        for cipher in DEFAULT_CIPHERS.split(":")
+        if cipher != "!AESCCM"
+)
+
+class SSLContext(ssl.SSLContext):
+    def set_alpn_protocols(self, protocols):
+        """
+        ALPN headers cause Google to return 403 Bad Authentication.
+        """
+        pass
+
+class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):
+        """
+        Secure settings from ssl.create_default_context(), but without
+        ssl.OP_NO_TICKET which causes Google to return 403 Bad
+        Authentication.
+        """
+        context = SSLContext()
+        context.set_ciphers(CIPHERS)
+        context.options |= ssl.OP_NO_COMPRESSION
+        context.options |= ssl.OP_NO_SSLv2
+        context.options |= ssl.OP_NO_SSLv3
+        context.post_handshake_auth = True
+        context.verify_mode = ssl.CERT_REQUIRED
+        self.poolmanager = PoolManager(*args, ssl_context=context, **kwargs)
 
 def _perform_auth_request(data, proxy=None):
     session = requests.session()
+    session.mount(auth_url, AuthHTTPAdapter())
     if proxy:
         session.proxies = proxy
 

@@ -36,7 +36,6 @@ setup(
     install_requires=[
         'pycryptodomex >= 3.0',
         'requests',
-        'urllib3 < 1.26.0',  # newer urllib3 versions cause BadAuth: https://github.com/urllib3/urllib3/issues/2101
     ],
     license='MIT',
     zip_safe=False,
