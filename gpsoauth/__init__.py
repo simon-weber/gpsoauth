@@ -1,6 +1,7 @@
 import requests
 import ssl
 from urllib3.poolmanager import PoolManager
+from urllib3.util.ssl_ import DEFAULT_CIPHERS
 
 from ._version import __version__
 from . import google
@@ -18,22 +19,12 @@ android_key_7_3_29 = google.key_from_b64(b64_key_7_3_29)
 auth_url = 'https://android.clients.google.com/auth'
 useragent = 'gpsoauth/' + __version__
 
-# Certain ciphers cause Google to return 403 Bad Authentication.
+# Blocking AESCCM in urllib3 > 1.26.3 causes Google to return 403 Bad
+# Authentication.
 CIPHERS = ":".join(
-    [
-        "ECDHE+AESGCM",
-        "ECDHE+CHACHA20",
-        "DHE+AESGCM",
-        "DHE+CHACHA20",
-        "ECDH+AES",
-        "DH+AES",
-        "RSA+AESGCM",
-        "RSA+AES",
-        "!aNULL",
-        "!eNULL",
-        "!MD5",
-        "!DSS",
-    ]
+    cipher
+        for cipher in DEFAULT_CIPHERS.split(":")
+        if cipher != "!AESCCM"
 )
 
 class SSLContext(ssl.SSLContext):
