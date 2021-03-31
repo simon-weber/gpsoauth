@@ -1,11 +1,12 @@
+from importlib_metadata import version
 import requests
 import ssl
 from urllib3.poolmanager import PoolManager
 from urllib3.util.ssl_ import DEFAULT_CIPHERS
 
-from ._version import __version__
 from . import google
 
+PACKAGE_VERSION = version(__package__)
 
 # The key is distirbuted with Google Play Services.
 # This one is from version 7.3.29.
@@ -17,7 +18,7 @@ b64_key_7_3_29 = (b"AAAAgMom/1a/v0lblO2Ubrt60J2gcuXSljGFQXgcyZWveWLEwo6prwgi3"
 android_key_7_3_29 = google.key_from_b64(b64_key_7_3_29)
 
 auth_url = 'https://android.clients.google.com/auth'
-useragent = 'gpsoauth/' + __version__
+useragent = 'gpsoauth/' + PACKAGE_VERSION
 
 # Blocking AESCCM in urllib3 > 1.26.3 causes Google to return 403 Bad
 # Authentication.
