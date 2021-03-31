@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "gpsoauth"
+version = "0.4.4"
+description = "A python client library for Google Play Services OAuth."
+authors = ["Simon Weber <simon@simonmweber.com>"]
+license = "MIT"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+readme = "README.rst"
+homepage = "https://github.com/simon-weber/gpsoauth"
+repository = "https://github.com/simon-weber/gpsoauth"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+pycryptodomex = "^3.10.1"
+requests = "^2.25.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
