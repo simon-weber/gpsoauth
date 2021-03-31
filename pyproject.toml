@@ -24,6 +24,7 @@ repository = "https://github.com/simon-weber/gpsoauth"
 python = "^3.6"
 pycryptodomex = "^3.10.1"
 requests = "^2.25.1"
+importlib-metadata = "^3.10.0"
 
 [tool.poetry.dev-dependencies]
 
