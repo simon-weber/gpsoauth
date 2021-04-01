@@ -1,4 +1,4 @@
-# GPSOAuth
+# gpsoauth
 
 [![CI](https://github.com/simon-weber/gpsoauth/actions/workflows/ci.yaml/badge.svg)](https://github.com/simon-weber/gpsoauth/actions/workflows/ci.yaml)
 [![PyPI version](https://badge.fury.io/py/gpsoauth.svg)](https://pypi.org/project/gpsoauth/)
@@ -6,7 +6,7 @@
 
 **Python client library for Google Play Services OAuth.**
 
-GPSOAuth allows python code to use the "master token" flow that KB Sriram described at
+`gpsoauth` allows python code to use the "master token" flow that KB Sriram described at
 <http://sbktech.blogspot.com/2014/01/inside-android-play-services-magic.html>.
 
 This can be useful when writing code that poses as a Google app, like
