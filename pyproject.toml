@@ -16,7 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
 ]
-readme = "README.rst"
+readme = "README.md"
 homepage = "https://github.com/simon-weber/gpsoauth"
 repository = "https://github.com/simon-weber/gpsoauth"
 
