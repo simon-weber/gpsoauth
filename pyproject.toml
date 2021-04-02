@@ -11,8 +11,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
 ]
@@ -21,7 +19,7 @@ homepage = "https://github.com/simon-weber/gpsoauth"
 repository = "https://github.com/simon-weber/gpsoauth"
 
 [tool.poetry.dependencies]
-python = "^3.6.1"
+python = "^3.8"
 pycryptodomex = "^3.10.1"
 requests = "^2.25.1"
 importlib-metadata = "^3.10.0"
@@ -50,6 +48,7 @@ combine_as_imports = true
 [tool.pylint.master]
 extension-pkg-whitelist = [
     "binascii",
+    "_ssl",
 ]
 
 [tool.pylint.format]

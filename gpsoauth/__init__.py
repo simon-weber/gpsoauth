@@ -54,7 +54,6 @@ class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
         context.options |= ssl.OP_NO_COMPRESSION
         context.options |= ssl.OP_NO_SSLv2
         context.options |= ssl.OP_NO_SSLv3
-        # pylint: disable=attribute-defined-outside-init
         context.post_handshake_auth = True
         context.verify_mode = ssl.CERT_REQUIRED
         self.poolmanager = PoolManager(*args, ssl_context=context, **kwargs)
