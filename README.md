@@ -21,3 +21,8 @@ Many thanks to Dima Kovalenko for reverse engineering the EncryptedPasswd signat
 - Ruby: <https://github.com/bryanmytko/gpsoauth>
 - Java: <https://github.com/svarzee/gpsoauth-java>
 - C++: <https://github.com/dvirtz/gpsoauth-cpp> and <https://github.com/Iciclelz/gpsoauthclient>
+
+## Contributing
+
+See [Contributing guidelines](CONTRIBUTING.md).
+This is an open-source project and all countributions are highly welcomed.
