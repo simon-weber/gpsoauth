@@ -1,10 +1,14 @@
 """A python client library for Google Play Services OAuth."""
-import ssl
+from __future__ import annotations
 
-from importlib_metadata import version
+from collections.abc import MutableMapping
+from importlib.metadata import version
+import ssl
+from typing import Any, Iterable
+
 import requests
-from urllib3.poolmanager import PoolManager
-from urllib3.util.ssl_ import DEFAULT_CIPHERS
+from urllib3.poolmanager import PoolManager  # type: ignore
+from urllib3.util.ssl_ import DEFAULT_CIPHERS  # type: ignore
 
 from . import google
 
@@ -34,7 +38,7 @@ CIPHERS = ":".join(
 class SSLContext(ssl.SSLContext):
     """SSLContext wrapper."""
 
-    def set_alpn_protocols(self, alpn_protocols):
+    def set_alpn_protocols(self, alpn_protocols: Iterable[str]) -> None:
         """
         ALPN headers cause Google to return 403 Bad Authentication.
         """
@@ -43,7 +47,7 @@ class SSLContext(ssl.SSLContext):
 class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
     """HTTPAdapter wrapper."""
 
-    def init_poolmanager(self, *args, **kwargs):
+    def init_poolmanager(self, *args: Any, **kwargs: Any) -> None:
         """
         Secure settings from ssl.create_default_context(), but without
         ssl.OP_NO_TICKET which causes Google to return 403 Bad
@@ -59,11 +63,13 @@ class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
         self.poolmanager = PoolManager(*args, ssl_context=context, **kwargs)
 
 
-def _perform_auth_request(data, proxy=None):
+def _perform_auth_request(
+    data: dict[str, int | str | bytes], proxies: MutableMapping[str, str] | None = None
+) -> dict[str, str]:
     session = requests.session()
     session.mount(AUTH_URL, AuthHTTPAdapter())
-    if proxy:
-        session.proxies = proxy
+    if proxies:
+        session.proxies = proxies
 
     res = session.post(AUTH_URL, data, headers={"User-Agent": USER_AGENT})
 
@@ -71,16 +77,16 @@ def _perform_auth_request(data, proxy=None):
 
 
 def perform_master_login(
-    email,
-    password,
-    android_id,
-    service="ac2dm",
-    device_country="us",
-    operator_country="us",
-    lang="en",
-    sdk_version=17,
-    proxy=None,
-):
+    email: str,
+    password: str,
+    android_id: str,
+    service: str = "ac2dm",
+    device_country: str = "us",
+    operator_country: str = "us",
+    lang: str = "en",
+    sdk_version: int = 17,
+    proxy: MutableMapping[str, str] | None = None,
+) -> dict[str, str]:
     """
     Perform a master login, which is what Android does when you first add
     a Google account.
@@ -103,7 +109,7 @@ def perform_master_login(
         }
     """
 
-    data = {
+    data: dict[str, int | str | bytes] = {
         "accountType": "HOSTED_OR_GOOGLE",
         "Email": email,
         "has_permission": 1,
@@ -124,18 +130,18 @@ def perform_master_login(
 
 
 def perform_oauth(
-    email,
-    master_token,
-    android_id,
-    service,
-    app,
-    client_sig,
-    device_country="us",
-    operator_country="us",
-    lang="en",
-    sdk_version=17,
-    proxy=None,
-):
+    email: str,
+    master_token: str,
+    android_id: str,
+    service: str,
+    app: str,
+    client_sig: str,
+    device_country: str = "us",
+    operator_country: str = "us",
+    lang: str = "en",
+    sdk_version: int = 17,
+    proxy: MutableMapping[str, str] | None = None,
+) -> dict[str, str]:
     """
     Use a master token from master_login to perform OAuth to a specific Google service.
 
@@ -153,7 +159,7 @@ def perform_oauth(
     ``Authorization: GoogleLogin auth=res['Auth']``.
     """
 
-    data = {
+    data: dict[str, int | str | bytes] = {
         "accountType": "HOSTED_OR_GOOGLE",
         "Email": email,
         "has_permission": 1,
