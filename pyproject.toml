@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gpsoauth"
-version = "0.4.4"
+version = "0.5.0"
 description = "A python client library for Google Play Services OAuth."
 authors = ["Simon Weber <simon@simonmweber.com>"]
 license = "MIT"
@@ -13,16 +13,18 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Typing :: Typed",
 ]
 readme = "README.md"
 homepage = "https://github.com/simon-weber/gpsoauth"
 repository = "https://github.com/simon-weber/gpsoauth"
+include = ["gpsoauth/py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
 pycryptodomex = "^3.10.1"
 requests = "^2.25.1"
-importlib-metadata = "^3.10.0"
+urllib3 = "^1.26.4"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.11.1"
@@ -35,6 +37,7 @@ flake8-comprehensions = "^3.4.0"
 flake8-use-fstring = "^1.1"
 flake8-simplify = "^0.14.0"
 pylint = "^2.7.4"
+mypy = "^0.812"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
