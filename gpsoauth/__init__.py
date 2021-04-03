@@ -8,7 +8,6 @@ from typing import Any, Iterable
 
 import requests
 from urllib3.poolmanager import PoolManager  # type: ignore
-from urllib3.util.ssl_ import DEFAULT_CIPHERS  # type: ignore
 
 from . import google
 
@@ -28,11 +27,22 @@ ANDROID_KEY_7_3_29 = google.key_from_b64(B64_KEY_7_3_29)
 AUTH_URL = "https://android.clients.google.com/auth"
 USER_AGENT = "gpsoauth/" + __version__
 
-# Blocking AESCCM in urllib3 > 1.26.3 causes Google to return 403 Bad
-# Authentication.
-CIPHERS = ":".join(
-    cipher for cipher in DEFAULT_CIPHERS.split(":") if cipher != "!AESCCM"
-)
+# Google is very picky about list of used ciphers. Changing this list most likely
+# will cause BadAuthentication error.
+CIPHERS = [
+    "ECDHE+AESGCM",
+    "ECDHE+CHACHA20",
+    "DHE+AESGCM",
+    "DHE+CHACHA20",
+    "ECDH+AES",
+    "DH+AES",
+    "RSA+AESGCM",
+    "RSA+AES",
+    "!aNULL",
+    "!eNULL",
+    "!MD5",
+    "!DSS",
+]
 
 
 class SSLContext(ssl.SSLContext):
@@ -54,7 +64,7 @@ class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
         Authentication.
         """
         context = SSLContext()
-        context.set_ciphers(CIPHERS)
+        context.set_ciphers(":".join(CIPHERS))
         context.options |= ssl.OP_NO_COMPRESSION
         context.options |= ssl.OP_NO_SSLv2
         context.options |= ssl.OP_NO_SSLv3
