@@ -26,5 +26,5 @@ For an explanation of recent changes, see [the changelog](https://github.com/sim
 
 ## Contributing
 
-See [Contributing guidelines](CONTRIBUTING.md).
+See [Contributing guidelines](https://github.com/simon-weber/gpsoauth/blob/master/CONTRIBUTING.md).
 This is an open-source project and all countributions are highly welcomed.
