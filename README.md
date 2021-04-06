@@ -15,6 +15,8 @@ This can be useful when writing code that poses as a Google app, like
 Many thanks to Dima Kovalenko for reverse engineering the EncryptedPasswd signature in
 <http://codedigging.com/blog/2014-06-09-about-encryptedpasswd>.
 
+For an explanation of recent changes, see [the changelog](https://github.com/simon-weber/gpsoauth/blob/master/CHANGELOG.md).
+
 ## Ports
 
 - C\#: <https://github.com/vemacs/GPSOAuthSharp>
