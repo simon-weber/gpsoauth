@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "gpsoauth"
-version = "0.5.1"
+version = "1.0.0"
 description = "A python client library for Google Play Services OAuth."
 authors = ["Simon Weber <simon@simonmweber.com>"]
 license = "MIT"
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
