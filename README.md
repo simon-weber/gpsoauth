@@ -13,7 +13,7 @@ This can be useful when writing code that poses as a Google app, like
 [gmusicapi does here](https://github.com/simon-weber/gmusicapi/blob/87a802ab3a59a7fa2974fd9755d59a55275484d9/gmusicapi/session.py#L267-L278).
 
 Many thanks to Dima Kovalenko for reverse engineering the EncryptedPasswd signature in
-<http://codedigging.com/blog/2014-06-09-about-encryptedpasswd>.
+<https://web.archive.org/web/20150814054004/http://codedigging.com/blog/2014-06-09-about-encryptedpasswd/>.
 
 For an explanation of recent changes, see [the changelog](https://github.com/simon-weber/gpsoauth/blob/master/CHANGELOG.md).
 
