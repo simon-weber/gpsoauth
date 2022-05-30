@@ -26,7 +26,7 @@ B64_KEY_7_3_29 = (
 ANDROID_KEY_7_3_29 = google.key_from_b64(B64_KEY_7_3_29)
 
 AUTH_URL = "https://android.clients.google.com/auth"
-USER_AGENT = "GoogleAuth/1.4"
+USER_AGENT = "gpsoauth/" + __version__
 
 # Google is very picky about list of used ciphers. Changing this list most likely
 # will cause BadAuthentication error.
@@ -93,7 +93,6 @@ def perform_master_login(
     lang: str = "en",
     sdk_version: int = 17,
     proxy: MutableMapping[str, str] | None = None,
-    client_sig: str = "38918a453d07199354f8b19af05ec6562ced5788",
 ) -> dict[str, str]:
     """
     Perform a master login, which is what Android does when you first add
@@ -130,9 +129,6 @@ def perform_master_login(
         "operatorCountry": operator_country,
         "lang": lang,
         "sdk_version": sdk_version,
-        "client_sig": client_sig,
-        "callerSig": client_sig,
-        "droidguard_results": "dummy123"
     }
 
     return _perform_auth_request(data, proxy)
