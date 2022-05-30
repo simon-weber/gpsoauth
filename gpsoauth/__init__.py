@@ -56,7 +56,9 @@ class SSLContext(ssl.SSLContext):
 
 
 class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
-    def init_poolmanager(self, *args, **kwargs):
+    """TLS tweaks."""
+
+    def init_poolmanager(self, *args: Any, **kwargs: Any) -> None:
         """
         Secure settings from ssl.create_default_context(), but without
         ssl.OP_NO_TICKET which causes Google to return 403 Bad
@@ -76,7 +78,10 @@ def _perform_auth_request(
     session.mount(AUTH_URL, AuthHTTPAdapter())
     if proxies:
         session.proxies = proxies
-    session.headers={"User-Agent": USER_AGENT, 'Content-type': 'application/x-www-form-urlencoded'}
+    session.headers = {
+        "User-Agent": USER_AGENT,
+        "Content-type": "application/x-www-form-urlencoded",
+    }
 
     res = session.post(AUTH_URL, data=data, verify=True)
 
@@ -132,7 +137,7 @@ def perform_master_login(
         "sdk_version": sdk_version,
         "client_sig": client_sig,
         "callerSig": client_sig,
-        "droidguard_results": "dummy123"
+        "droidguard_results": "dummy123",
     }
 
     return _perform_auth_request(data, proxy)
