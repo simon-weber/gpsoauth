@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2022-05-31
+
+### Changed
+
+- Fix compatibility with urllib3 < 1.26 ([#43](https://github.com/simon-weber/gpsoauth/pull/43))
+
 ## [1.0.1] - 2022-05-31
 
 ### Changed
