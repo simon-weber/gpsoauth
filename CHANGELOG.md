@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2022-05-31
+
+### Changed
+
+- Update master token flow to prevent NeedsBrowser responses. Thanks [@CyberAltra](https://github.com/CyberAltra)!
+
 ## [1.0.0] - 2021-04-06
 
 Thanks to [@KapJI](https://github.com/KapJI) for their contributions to this release!
