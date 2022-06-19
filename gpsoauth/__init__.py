@@ -7,8 +7,10 @@ import ssl
 from typing import Any, Iterable
 
 import requests
-from urllib3.poolmanager import PoolManager  # type: ignore
-from urllib3.util import ssl_
+
+# Type annotations for urllib3 will be released with v2.
+from urllib3.poolmanager import PoolManager  # type: ignore[import]
+from urllib3.util import ssl_  # type: ignore[import]
 
 from . import google
 
@@ -78,10 +80,12 @@ def _perform_auth_request(
     session.mount(AUTH_URL, AuthHTTPAdapter())
     if proxies:
         session.proxies = proxies
-    session.headers = {
-        "User-Agent": USER_AGENT,
-        "Content-type": "application/x-www-form-urlencoded",
-    }
+    session.headers.update(
+        {
+            "User-Agent": USER_AGENT,
+            "Content-type": "application/x-www-form-urlencoded",
+        }
+    )
 
     res = session.post(AUTH_URL, data=data, verify=True)
 
