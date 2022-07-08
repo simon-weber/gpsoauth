@@ -9,6 +9,23 @@
 `gpsoauth` allows python code to use the "master token" flow that KB Sriram described at
 <http://sbktech.blogspot.com/2014/01/inside-android-play-services-magic.html>.
 
+```python
+import gpsoauth
+
+email = 'example@gmail.com'
+password = 'my-password'
+android_id = '0123456789abcdef'
+
+master_response = gpsoauth.perform_master_login(email, password, android_id)
+master_token = master_response['Token']
+
+auth_response = gpsoauth.perform_oauth(
+    email, master_token, android_id,
+    service='sj', app='com.google.android.music',
+    client_sig='...')
+token = auth_response['Auth']
+```
+
 This can be useful when writing code that poses as a Google app, like
 [gmusicapi does here](https://github.com/simon-weber/gmusicapi/blob/87a802ab3a59a7fa2974fd9755d59a55275484d9/gmusicapi/session.py#L267-L278).
 
