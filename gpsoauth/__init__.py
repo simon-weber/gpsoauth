@@ -10,7 +10,11 @@ import requests
 
 # Type annotations for urllib3 will be released with v2.
 from urllib3.poolmanager import PoolManager  # type: ignore[import]
-from urllib3.util import ssl_  # type: ignore[import]
+
+SSL_DEFAULT_CIPHERS = None
+if version("urllib3") < "2.0.0a1":
+    from urllib3.util.ssl_ import DEFAULT_CIPHERS  # type: ignore[import]
+    SSL_DEFAULT_CIPHERS = DEFAULT_CIPHERS
 
 from . import google
 
@@ -67,7 +71,8 @@ class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
         Authentication.
         """
         context = SSLContext()
-        context.set_ciphers(ssl_.DEFAULT_CIPHERS)
+        if SSL_DEFAULT_CIPHERS:
+            context.set_ciphers(SSL_DEFAULT_CIPHERS)
         context.verify_mode = ssl.CERT_REQUIRED
         context.options &= ~ssl.OP_NO_TICKET  # pylint: disable=E1101
         self.poolmanager = PoolManager(*args, ssl_context=context, **kwargs)
