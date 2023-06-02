@@ -24,6 +24,7 @@ include = ["gpsoauth/py.typed"]
 python = "^3.8"
 pycryptodomex = ">= 3.0"
 requests = ">= 2.0.0"
+urllib3 = "<2.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.11.1"
