@@ -89,8 +89,9 @@ def _perform_auth_request(
         session.proxies = proxies
     session.headers.update(
         {
-            "User-Agent": USER_AGENT,
+            "Accept-Encoding": "identity",
             "Content-type": "application/x-www-form-urlencoded",
+            "User-Agent": USER_AGENT,
         }
     )
 
