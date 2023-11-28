@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as of 1.0.0.
 
+## [1.0.4] - 2023-11-28
+
+### Changed
+
+- Set Accept-Encoding: identity to prevent NeedsBrowser in some cases ([#61](https://github.com/simon-weber/gpsoauth/pull/61))
+
 ## [1.0.3] - 2023-09-24
 
 ### Changed
