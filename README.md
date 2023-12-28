@@ -34,6 +34,31 @@ Many thanks to Dima Kovalenko for reverse engineering the EncryptedPasswd signat
 
 For an explanation of recent changes, see [the changelog](https://github.com/simon-weber/gpsoauth/blob/master/CHANGELOG.md).
 
+## Alternative flow
+
+There is an alternative login flow if you are experiencing `BadAuthentication` errors.
+
+1. Login to your Google account (Ex: Via https://accounts.google.com/EmbeddedSetup)
+2. Obtain the value of the `oauth_token` cookie
+3. Perform the token exchange:
+
+```python
+import gpsoauth
+
+email = 'example@gmail.com'
+android_id = '0123456789abcdef'
+token = '...' # insert the oauth_token here
+
+master_response = gpsoauth.exchange_token(email, token, android_id)
+master_token = master_response['Token']
+
+auth_response = gpsoauth.perform_oauth(
+    email, master_token, android_id,
+    service='sj', app='com.google.android.music',
+    client_sig='...')
+token = auth_response['Auth']
+```
+
 ## Ports
 
 - C\#: <https://github.com/vemacs/GPSOAuthSharp>
@@ -44,4 +69,4 @@ For an explanation of recent changes, see [the changelog](https://github.com/sim
 ## Contributing
 
 See [Contributing guidelines](https://github.com/simon-weber/gpsoauth/blob/master/CONTRIBUTING.md).
-This is an open-source project and all countributions are highly welcomed.
+This is an open-source project and all contributions are highly welcomed.
