@@ -168,8 +168,8 @@ def exchange_token(
     client_sig: str = "38918a453d07199354f8b19af05ec6562ced5788",
 ) -> dict[str, str]:
     """
-    Exchanges a Web oauth_token for a master token
-    a Google account.
+    Exchanges a web oauth_token for a master token.
+    
     Return a dict, eg::
         {
             'Auth': '...',
