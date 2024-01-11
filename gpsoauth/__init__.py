@@ -169,7 +169,7 @@ def exchange_token(
 ) -> dict[str, str]:
     """
     Exchanges a web oauth_token for a master token.
-    
+
     Return a dict, eg::
         {
             'Auth': '...',
