@@ -208,6 +208,7 @@ def exchange_token(
 
     return _perform_auth_request(data, proxy)
 
+
 def perform_oauth(
     email: str,
     master_token: str,
