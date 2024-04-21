@@ -38,9 +38,11 @@ For an explanation of recent changes, see [the changelog](https://github.com/sim
 
 There is an alternative login flow if you are experiencing `BadAuthentication` errors.
 
-1. Login to your Google account (Ex: Via https://accounts.google.com/EmbeddedSetup)
-2. Obtain the value of the `oauth_token` cookie
-3. Perform the token exchange:
+1. Go to https://accounts.google.com/EmbeddedSetup
+2. Log into your Google Account
+3. Click on "I agree" when prompted
+4. Obtain the value of the `oauth_token` cookie (accessible in Chrome DevTools under Application>Cookies>https://accounts.google.com
+6. Perform the token exchange:
 
 ```python
 import gpsoauth
