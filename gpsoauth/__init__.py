@@ -77,6 +77,7 @@ class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
             context.set_ciphers(SSL_DEFAULT_CIPHERS)
         context.verify_mode = ssl.CERT_REQUIRED
         context.options &= ~ssl.OP_NO_TICKET  # pylint: disable=E1101
+        context.load_default_certs()
         self.poolmanager = PoolManager(*args, ssl_context=context, **kwargs)
 
 
