@@ -148,6 +148,7 @@ def perform_master_login(
         "operatorCountry": operator_country,
         "lang": lang,
         "sdk_version": sdk_version,
+        "google_play_services_version": 240913000,
         "client_sig": client_sig,
         "callerSig": client_sig,
         "droidguard_results": "dummy123",
@@ -202,6 +203,7 @@ def exchange_token(
         "operatorCountry": operator_country,
         "lang": lang,
         "sdk_version": sdk_version,
+        "google_play_services_version": 240913000,
         "client_sig": client_sig,
         "callerSig": client_sig,
         "droidguard_results": "dummy123",
@@ -254,6 +256,7 @@ def perform_oauth(
         "operatorCountry": operator_country,
         "lang": lang,
         "sdk_version": sdk_version,
+        "google_play_services_version": 240913000,
     }
 
     return _perform_auth_request(data, proxy)
