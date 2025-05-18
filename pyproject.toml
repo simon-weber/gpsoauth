@@ -11,8 +11,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.9",  # TODO
     "Typing :: Typed",
 ]
 readme = "README.md"
@@ -21,7 +20,7 @@ repository = "https://github.com/simon-weber/gpsoauth"
 include = ["gpsoauth/py.typed"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 pycryptodomex = ">= 3.0"
 requests = ">= 2.0.0"
 urllib3 = "<2.0"
