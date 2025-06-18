@@ -40,7 +40,7 @@ There is an alternative login flow if you are experiencing `BadAuthentication` e
 
 1. Go to https://accounts.google.com/EmbeddedSetup
 2. Log into your Google Account
-3. Click on "I agree" when prompted. The page may show a loading screen forever; ignore it and move on to the next step.
+3. Click on "I agree" when prompted. The page may show a loading screen forever; ignore it and inspect the page > application > cookies > copy oauth_token.
 4. Obtain the value of the `oauth_token` cookie. For more details see [the gpsoauth-java readme](https://github.com/rukins/gpsoauth-java/blob/b74ebca999d0f5bd38a2eafe3c0d50be552f6385/README.md#receiving-an-authentication-token).
 
 Then, perform the token exchange:
