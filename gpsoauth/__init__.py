@@ -7,15 +7,14 @@ import ssl
 from typing import Any, Iterable
 
 import requests
-
-# Type annotations for urllib3 will be released with v2.
-from urllib3.poolmanager import PoolManager  # type: ignore[import]
+from urllib3.poolmanager import PoolManager
 
 from . import google
 
 SSL_DEFAULT_CIPHERS = None
 if version("urllib3") < "2.0.0a1":
-    from urllib3.util.ssl_ import DEFAULT_CIPHERS  # type: ignore[import]
+    # pylint: disable-next=no-name-in-module
+    from urllib3.util.ssl_ import DEFAULT_CIPHERS
 
     SSL_DEFAULT_CIPHERS = DEFAULT_CIPHERS
 
