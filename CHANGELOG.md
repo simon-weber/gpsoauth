@@ -3,6 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) as of 1.0.0.
 
+## [2.0.0] - 2025-07-03
+
+### Breaking
+
+- Set minimum supported Python version to 3.9
+
+### Changed
+
+- Support urllib3 > 2.0 ([#79](https://github.com/simon-weber/gpsoauth/pull/79))
+- Update request format to fix ServiceDisabled response ([#74](https://github.com/simon-weber/gpsoauth/pull/74))
+
 ## [1.1.1] - 2024-06-09
 
 ### Changed
