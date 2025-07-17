@@ -64,6 +64,7 @@ token = auth_response['Auth']
 
 ## Ports
 
+- Typescript: <https://github.com/billgreenwald/gpsoauth-js>
 - C\#: <https://github.com/vemacs/GPSOAuthSharp>
 - Ruby: <https://github.com/bryanmytko/gpsoauth>
 - Java: <https://github.com/svarzee/gpsoauth-java>
