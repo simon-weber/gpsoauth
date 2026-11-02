@@ -11,7 +11,7 @@ jobs:
     name: Pre-commit
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
@@ -24,6 +24,10 @@ jobs:
 
       - name: Install Poetry
         uses: abatilo/actions-poetry@v3
+        env:
+          # The runner image's pipx shared libraries can have a pip that no
+          # longer supports this job's Python; make fresh ones with it.
+          PIPX_SHARED_LIBS: ${{ runner.temp }}/pipx-shared
         with:
           poetry-version: 2.0.1
 
