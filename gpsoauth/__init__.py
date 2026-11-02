@@ -66,12 +66,21 @@ def create_ssl_context() -> ssl.SSLContext:
     """
     Return a new SSL context with the TLS settings gpsoauth uses for AUTH_URL.
 
-    Secure settings from ssl.create_default_context(), but without
-    ssl.OP_NO_TICKET or ALPN, which cause Google to return 403 Bad
-    Authentication. The context checks the server's certificate and hostname
-    and trusts the system's certificate authorities; add others with its
-    load_verify_locations(). Loading the certificates blocks, so in async code
-    create the context once, outside the event loop.
+    It is built as the one gpsoauth's own requests use: SSLContext() without a
+    protocol argument, with urllib3's ciphers if urllib3 < 2. It requires a
+    valid certificate for the server's hostname and trusts the system's
+    certificate authorities. Unlike urllib3's default context, it allows TLS
+    session tickets, and unlike urllib3's and aiohttp's, it offers no ALPN
+    (its set_alpn_protocols() does nothing): Google returns 403 Bad
+    Authentication if tickets are disabled or ALPN is offered.
+
+    gpsoauth's own functions may also trust the CA bundle requests uses,
+    depending on its version and settings: certifi's, or the file named by
+    REQUESTS_CA_BUNDLE or CURL_CA_BUNDLE. To trust the same certificates, add
+    that bundle with the context's load_verify_locations().
+
+    Loading certificates blocks, so in async code create the context once,
+    outside the event loop, and add any bundle there too.
     """
     context = SSLContext()
     if SSL_DEFAULT_CIPHERS:

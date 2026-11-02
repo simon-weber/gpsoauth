@@ -234,18 +234,25 @@ def test_wrapper_request(
 
 
 HOST = "localnode.example.test"
+# Invented certificates: file name, then the name they are for. The file
+# names avoid "*", which Windows doesn't allow.
+CERTIFICATES = {
+    "matching": HOST,
+    "partial-wildcard": "local*.example.test",
+    "mismatch": "different.example.test",
+}
 
 
 @pytest.fixture(name="certificates", scope="module")
 def fixture_certificates(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    """Invented self-signed certificates for HOST and other names."""
+    """Invented self-signed certificates, named as in CERTIFICATES."""
     if not shutil.which("openssl"):
         pytest.skip("needs the openssl command")
     directory = tmp_path_factory.mktemp("certificates")
-    for name in (HOST, "local*.example.test", "different.example.test"):
+    for name, san in CERTIFICATES.items():
         subprocess.run(
             ["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "1"]
-            + ["-subj", "/CN=invented", "-addext", f"subjectAltName=DNS:{name}"]
+            + ["-subj", "/CN=invented", "-addext", f"subjectAltName=DNS:{san}"]
             + ["-keyout", str(directory / f"{name}.key")]
             + ["-out", str(directory / f"{name}.pem")],
             check=True,
@@ -273,7 +280,7 @@ class _AuthHandler(http.server.BaseHTTPRequestHandler):
 def _tls_server(
     certificates: Path, name: str, monkeypatch: pytest.MonkeyPatch
 ) -> Iterator[int]:
-    """Serve one connection on 127.0.0.1 with the certificate for name.
+    """Serve one connection on 127.0.0.1 with the named certificate.
 
     The certificate is the only one trusted by load_default_certs().
     """
@@ -296,11 +303,11 @@ def _tls_server(
 @pytest.mark.parametrize(
     "name,accepted",
     [
-        (HOST, True),
+        ("matching", True),
         # urllib3 accepts partial wildcards, Python's ssl module doesn't: the
         # wrappers keep urllib3's check.
-        ("local*.example.test", True),
-        ("different.example.test", False),
+        ("partial-wildcard", True),
+        ("mismatch", False),
     ],
 )
 def test_wrapper_checks_hostname(
@@ -326,9 +333,7 @@ def test_wrapper_checks_hostname(
                 )
 
 
-@pytest.mark.parametrize(
-    "name,accepted", [(HOST, True), ("different.example.test", False)]
-)
+@pytest.mark.parametrize("name,accepted", [("matching", True), ("mismatch", False)])
 def test_ssl_context_checks_hostname(
     certificates: Path, monkeypatch: pytest.MonkeyPatch, name: str, accepted: bool
 ) -> None:

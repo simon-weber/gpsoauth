@@ -89,7 +89,9 @@ async def perform_oauth(email, master_token, android_id):
         return gpsoauth.google.parse_auth_response(await response.text())
 ```
 
-These functions give you the form fields, the headers gpsoauth sets and its TLS settings. Your client still adds its own default headers, and handles proxies, timeouts and HTTP errors as it does for its other requests. `create_ssl_context()` checks the server's certificate and hostname, and trusts the system's certificate authorities; if you need others, add them with `ssl_context.load_verify_locations()`.
+These functions give you the form fields, the headers gpsoauth sets and its TLS settings. Your client still adds its own default headers, and handles proxies, timeouts and HTTP errors as it does for its other requests. It must also URL-encode the fields, as in the example: `build_master_login_data()` returns `EncryptedPasswd` as bytes, which aiohttp would otherwise send as a file upload.
+
+`create_ssl_context()` checks the server's certificate and hostname, and trusts the system's certificate authorities. gpsoauth's own functions may also trust the CA bundle requests uses, depending on its version and settings: certifi's, or the file named by `REQUESTS_CA_BUNDLE` or `CURL_CA_BUNDLE`. So a certificate that gpsoauth's functions accept can fail with another client. To trust the same certificates, add that bundle with `ssl_context.load_verify_locations()`, for example `ssl_context.load_verify_locations(requests.certs.where())` for certifi's. This also blocks, so do it where you create the context, outside the event loop.
 
 ## Ports
 
