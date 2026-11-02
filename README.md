@@ -62,6 +62,35 @@ auth_response = gpsoauth.perform_oauth(
 token = auth_response['Auth']
 ```
 
+## Using another HTTP client
+
+`perform_master_login()`, `exchange_token()` and `perform_oauth()` send their requests with [requests](https://requests.readthedocs.io/). To send them with another HTTP client, such as an async one, build the form fields with `build_master_login_data()`, `build_exchange_token_data()` or `build_oauth_data()`, which take the same arguments except `proxy`. For example, with [aiohttp](https://docs.aiohttp.org/):
+
+```python
+from urllib.parse import urlencode
+
+import aiohttp
+import gpsoauth
+
+# Loading the certificates blocks: create the context once, outside the event loop.
+ssl_context = gpsoauth.create_ssl_context()
+
+async def perform_oauth(email, master_token, android_id):
+    data = gpsoauth.build_oauth_data(
+        email, master_token, android_id,
+        service='sj', app='com.google.android.music',
+        client_sig='...')
+    async with aiohttp.ClientSession() as session, session.post(
+        gpsoauth.AUTH_URL,
+        data=urlencode(data).encode('ascii'),
+        headers=gpsoauth.build_auth_headers(),
+        ssl=ssl_context,
+    ) as response:
+        return gpsoauth.google.parse_auth_response(await response.text())
+```
+
+These functions give you the form fields, the headers gpsoauth sets and its TLS settings. Your client still adds its own default headers, and handles proxies, timeouts and HTTP errors as it does for its other requests. `create_ssl_context()` checks the server's certificate and hostname, and trusts the system's certificate authorities; if you need others, add them with `ssl_context.load_verify_locations()`.
+
 ## Ports
 
 - Typescript: <https://github.com/billgreenwald/gpsoauth-js>
