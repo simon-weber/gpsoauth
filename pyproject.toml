@@ -11,11 +11,11 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Typing :: Typed",
 ]
 readme = "README.md"
@@ -24,7 +24,7 @@ repository = "https://github.com/simon-weber/gpsoauth"
 include = ["gpsoauth/py.typed"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 pycryptodomex = ">= 3.0"
 requests = ">= 2.0.0"
 urllib3 = ">= 1.26.0"
@@ -33,7 +33,7 @@ urllib3 = ">= 1.26.0"
 pre-commit = "^2.11.1"
 black = "^22.3.0"
 isort = "^5.8.0"
-pytest = "^6.2.2"
+pytest = "^8.4"
 flake8 = "^7.0"
 flake8-bugbear = ">= 21.4.1"
 flake8-comprehensions = ">= 3.4.0"
