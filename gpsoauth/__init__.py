@@ -62,22 +62,59 @@ class SSLContext(ssl.SSLContext):
         """
 
 
+def create_ssl_context() -> ssl.SSLContext:
+    """
+    Return a new SSL context with the TLS settings gpsoauth uses for AUTH_URL.
+
+    It is built as the one gpsoauth's own requests use: SSLContext() without a
+    protocol argument, with urllib3's ciphers if urllib3 < 2. It requires a
+    valid certificate for the server's hostname and trusts the system's
+    certificate authorities. Unlike urllib3's default context, it allows TLS
+    session tickets, and unlike urllib3's and aiohttp's, it offers no ALPN
+    (its set_alpn_protocols() does nothing): Google returns 403 Bad
+    Authentication if tickets are disabled or ALPN is offered.
+
+    gpsoauth's own functions may also trust the CA bundle requests uses,
+    depending on its version and settings: certifi's, or the file named by
+    REQUESTS_CA_BUNDLE or CURL_CA_BUNDLE. To trust the same certificates, add
+    that bundle with the context's load_verify_locations().
+
+    Loading certificates blocks, so in async code create the context once,
+    outside the event loop, and add any bundle there too.
+    """
+    context = SSLContext()
+    if SSL_DEFAULT_CIPHERS:
+        context.set_ciphers(SSL_DEFAULT_CIPHERS)
+    context.verify_mode = ssl.CERT_REQUIRED
+    context.check_hostname = True
+    context.options &= ~ssl.OP_NO_TICKET  # pylint: disable=E1101
+    context.load_default_certs()
+    return context
+
+
 class AuthHTTPAdapter(requests.adapters.HTTPAdapter):
     """TLS tweaks."""
 
     def init_poolmanager(self, *args: Any, **kwargs: Any) -> None:
-        """
-        Secure settings from ssl.create_default_context(), but without
-        ssl.OP_NO_TICKET which causes Google to return 403 Bad
-        Authentication.
-        """
-        context = SSLContext()
-        if SSL_DEFAULT_CIPHERS:
-            context.set_ciphers(SSL_DEFAULT_CIPHERS)
-        context.verify_mode = ssl.CERT_REQUIRED
-        context.options &= ~ssl.OP_NO_TICKET  # pylint: disable=E1101
-        context.load_default_certs()
+        """Use the TLS settings of create_ssl_context()."""
+        context = create_ssl_context()
+        # Leave the hostname check to urllib3, as gpsoauth always has: its
+        # matching differs from the ssl module's, e.g. for partial wildcards.
+        context.check_hostname = False
         self.poolmanager = PoolManager(*args, ssl_context=context, **kwargs)
+
+
+def build_auth_headers() -> dict[str, str]:
+    """
+    Return the headers gpsoauth sets on its requests to AUTH_URL.
+
+    HTTP clients add their own default headers to these, such as Accept.
+    """
+    return {
+        "Accept-Encoding": "identity",
+        "Content-type": "application/x-www-form-urlencoded",
+        "User-Agent": USER_AGENT,
+    }
 
 
 def _perform_auth_request(
@@ -87,17 +124,50 @@ def _perform_auth_request(
     session.mount(AUTH_URL, AuthHTTPAdapter())
     if proxies:
         session.proxies = proxies
-    session.headers.update(
-        {
-            "Accept-Encoding": "identity",
-            "Content-type": "application/x-www-form-urlencoded",
-            "User-Agent": USER_AGENT,
-        }
-    )
+    session.headers.update(build_auth_headers())
 
     res = session.post(AUTH_URL, data=data, verify=True)
 
     return google.parse_auth_response(res.text)
+
+
+def build_master_login_data(
+    email: str,
+    password: str,
+    android_id: str,
+    service: str = "ac2dm",
+    device_country: str = "us",
+    operator_country: str = "us",
+    lang: str = "en",
+    sdk_version: int = 17,
+    client_sig: str = "38918a453d07199354f8b19af05ec6562ced5788",
+) -> dict[str, int | str | bytes]:
+    """
+    Return the form fields perform_master_login() posts to AUTH_URL, as a new dict.
+
+    It takes the same arguments, except proxy. EncryptedPasswd differs on each
+    call, as the encryption is randomized.
+    """
+    return {
+        "accountType": "HOSTED_OR_GOOGLE",
+        "Email": email,
+        "has_permission": 1,
+        "add_account": 1,
+        "EncryptedPasswd": google.construct_signature(
+            email, password, ANDROID_KEY_7_3_29
+        ),
+        "service": service,
+        "source": "android",
+        "androidId": android_id,
+        "device_country": device_country,
+        "operatorCountry": operator_country,
+        "lang": lang,
+        "sdk_version": sdk_version,
+        "google_play_services_version": 240913000,
+        "client_sig": client_sig,
+        "callerSig": client_sig,
+        "droidguard_results": "dummy123",
+    }
 
 
 def perform_master_login(
@@ -132,14 +202,44 @@ def perform_master_login(
         }
     """
 
-    data: dict[str, int | str | bytes] = {
+    data = build_master_login_data(
+        email,
+        password,
+        android_id,
+        service=service,
+        device_country=device_country,
+        operator_country=operator_country,
+        lang=lang,
+        sdk_version=sdk_version,
+        client_sig=client_sig,
+    )
+
+    return _perform_auth_request(data, proxy)
+
+
+def build_exchange_token_data(
+    email: str,
+    token: str,
+    android_id: str,
+    service: str = "ac2dm",
+    device_country: str = "us",
+    operator_country: str = "us",
+    lang: str = "en",
+    sdk_version: int = 17,
+    client_sig: str = "38918a453d07199354f8b19af05ec6562ced5788",
+) -> dict[str, int | str | bytes]:
+    """
+    Return the form fields exchange_token() posts to AUTH_URL, as a new dict.
+
+    It takes the same arguments, except proxy.
+    """
+    return {
         "accountType": "HOSTED_OR_GOOGLE",
         "Email": email,
         "has_permission": 1,
         "add_account": 1,
-        "EncryptedPasswd": google.construct_signature(
-            email, password, ANDROID_KEY_7_3_29
-        ),
+        "ACCESS_TOKEN": 1,
+        "Token": token,
         "service": service,
         "source": "android",
         "androidId": android_id,
@@ -152,8 +252,6 @@ def perform_master_login(
         "callerSig": client_sig,
         "droidguard_results": "dummy123",
     }
-
-    return _perform_auth_request(data, proxy)
 
 
 def exchange_token(
@@ -188,27 +286,54 @@ def exchange_token(
         }
     """
 
-    data: dict[str, int | str | bytes] = {
+    data = build_exchange_token_data(
+        email,
+        token,
+        android_id,
+        service=service,
+        device_country=device_country,
+        operator_country=operator_country,
+        lang=lang,
+        sdk_version=sdk_version,
+        client_sig=client_sig,
+    )
+
+    return _perform_auth_request(data, proxy)
+
+
+def build_oauth_data(
+    email: str,
+    master_token: str,
+    android_id: str,
+    service: str,
+    app: str,
+    client_sig: str,
+    device_country: str = "us",
+    operator_country: str = "us",
+    lang: str = "en",
+    sdk_version: int = 17,
+) -> dict[str, int | str | bytes]:
+    """
+    Return the form fields perform_oauth() posts to AUTH_URL, as a new dict.
+
+    It takes the same arguments, except proxy.
+    """
+    return {
         "accountType": "HOSTED_OR_GOOGLE",
         "Email": email,
         "has_permission": 1,
-        "add_account": 1,
-        "ACCESS_TOKEN": 1,
-        "Token": token,
+        "EncryptedPasswd": master_token,
         "service": service,
         "source": "android",
         "androidId": android_id,
+        "app": app,
+        "client_sig": client_sig,
         "device_country": device_country,
         "operatorCountry": operator_country,
         "lang": lang,
         "sdk_version": sdk_version,
         "google_play_services_version": 240913000,
-        "client_sig": client_sig,
-        "callerSig": client_sig,
-        "droidguard_results": "dummy123",
     }
-
-    return _perform_auth_request(data, proxy)
 
 
 def perform_oauth(
@@ -241,21 +366,17 @@ def perform_oauth(
     ``Authorization: GoogleLogin auth=res['Auth']``.
     """
 
-    data: dict[str, int | str | bytes] = {
-        "accountType": "HOSTED_OR_GOOGLE",
-        "Email": email,
-        "has_permission": 1,
-        "EncryptedPasswd": master_token,
-        "service": service,
-        "source": "android",
-        "androidId": android_id,
-        "app": app,
-        "client_sig": client_sig,
-        "device_country": device_country,
-        "operatorCountry": operator_country,
-        "lang": lang,
-        "sdk_version": sdk_version,
-        "google_play_services_version": 240913000,
-    }
+    data = build_oauth_data(
+        email,
+        master_token,
+        android_id,
+        service=service,
+        app=app,
+        client_sig=client_sig,
+        device_country=device_country,
+        operator_country=operator_country,
+        lang=lang,
+        sdk_version=sdk_version,
+    )
 
     return _perform_auth_request(data, proxy)
