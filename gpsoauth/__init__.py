@@ -66,8 +66,8 @@ def create_ssl_context() -> ssl.SSLContext:
     """
     Return a new SSL context with the TLS settings gpsoauth uses for AUTH_URL.
 
-    It is built as the one gpsoauth's own requests use: SSLContext() without a
-    protocol argument, with urllib3's ciphers if urllib3 < 2. It requires a
+    It is built as the one gpsoauth's own requests use: a client context
+    (PROTOCOL_TLS_CLIENT), with urllib3's ciphers if urllib3 < 2. It requires a
     valid certificate for the server's hostname and trusts the system's
     certificate authorities. Unlike urllib3's default context, it allows TLS
     session tickets, and unlike urllib3's and aiohttp's, it offers no ALPN
@@ -82,7 +82,7 @@ def create_ssl_context() -> ssl.SSLContext:
     Loading certificates blocks, so in async code create the context once,
     outside the event loop, and add any bundle there too.
     """
-    context = SSLContext()
+    context = SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     if SSL_DEFAULT_CIPHERS:
         context.set_ciphers(SSL_DEFAULT_CIPHERS)
     context.verify_mode = ssl.CERT_REQUIRED

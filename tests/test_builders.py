@@ -350,8 +350,13 @@ def test_ssl_context_checks_hostname(
                     context.wrap_socket(sock, server_hostname=HOST)
 
 
+@pytest.mark.filterwarnings("error::DeprecationWarning")
 def test_ssl_context_settings() -> None:
-    """A new context each time, checking certificates, with session tickets."""
+    """A new context each time, checking certificates, with session tickets.
+
+    Creating it raises no DeprecationWarning, such as those of SSLContext()
+    without a protocol.
+    """
     context = gpsoauth.create_ssl_context()
     assert isinstance(context, gpsoauth.SSLContext)
     assert context is not gpsoauth.create_ssl_context()
@@ -370,7 +375,7 @@ def _cipher_names(context: ssl.SSLContext, tls13: bool) -> list[str]:
 
 def test_ssl_context_ciphers() -> None:
     """With urllib3 < 2, use its ciphers; set_ciphers() leaves TLS 1.3 alone."""
-    baseline = ssl.SSLContext()
+    baseline = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     cipher = "ECDHE-RSA-AES128-GCM-SHA256"
     with mock.patch.object(gpsoauth, "SSL_DEFAULT_CIPHERS", cipher):
         context = gpsoauth.create_ssl_context()
